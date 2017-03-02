@@ -9,7 +9,8 @@ You can also run the script from the command line:
 
     python spotify-backup.py playlists.txt
 
-Adding `--format=json` will give you a JSON dump with everything that the script gets from the Spotify API. If for some reason the browser-based authorization flow doesn't work, you can also [generate an OAuth token](https://developer.spotify.com/web-api/console/get-playlists/) on the developer site (with the `playlist-read-private` permission) and pass it with the `--token` option.
+Adding `--format=json-slim` will give you a JSON file instead of tab-separated and adding `--format=json` will give you a JSON dump with everything that the script gets from the Spotify API.
+If for some reason the browser-based authorization flow doesn't work, you can also [generate an OAuth token](https://developer.spotify.com/web-api/console/get-playlists/) on the developer site (with the `playlist-read-private` permission) and pass it with the `--token` option.
 
 Collaborative playlists and playlist folders don't show up in the API, sadly.
 

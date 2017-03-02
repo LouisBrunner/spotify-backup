@@ -122,7 +122,7 @@ def main():
 	                                           + ' an OAuth token with the --token option.')
 	parser.add_argument('--token', metavar='OAUTH_TOKEN', help='use a Spotify OAuth token (requires the '
 	                                           + '`playlist-read-private` permission)')
-	parser.add_argument('--format', default='txt', choices=['json', 'txt'], help='output format (default: txt)')
+	parser.add_argument('--format', default='txt', choices=['json', 'txt', 'json-slim'], help='output format (default: txt)')
 	parser.add_argument('file', help='output filename', nargs='?')
 	args = parser.parse_args()
 	
@@ -151,7 +151,26 @@ def main():
 		# JSON file.
 		if args.format == 'json':
 			json.dump(playlists, f)
-		
+
+		# Curated JSON file
+		if args.format == 'json-slim':
+			fplaylists = []
+			for playlist in playlists:
+				plist = {}
+				plist['name'] = playlist['name']
+				plist['permissions'] = {'owner': playlist['owner']['id'], 'public': playlist['public'], 'collaborative': playlist['collaborative']}
+				plist['size'] = len(playlist['tracks'])
+				plist['tracks'] = []
+				for track in playlist['tracks']:
+					ptrack = {}
+					ptrack['name'] = track['track']['name']
+					ptrack['artists'] = ', '.join([artist['name'] for artist in track['track']['artists']])
+					ptrack['album'] = track['track']['album']['name']
+					ptrack['added_at'] = track['added_at']
+					plist['tracks'].append(ptrack)
+				fplaylists.append(plist)
+			json.dump(fplaylists, f, indent=4)
+
 		# Tab-separated file.
 		elif args.format == 'txt':
 			for playlist in playlists:
